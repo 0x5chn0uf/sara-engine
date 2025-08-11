@@ -6,11 +6,11 @@ build-backend = "setuptools.build_meta"
 name = "sara"
 version = "0.1.0"
 description = "Sara Memory Bridge: semantic task memory module pluggable into any project."
-readme = "sara/README.md"
+readme = "README.md"
 authors = [
     { name = "SmartWalletFX Team" }
 ]
-requires-python = ">=3.12"
+requires-python = ">=3.11"
 # Core runtime dependencies
 dependencies = [
     "watchdog>=3.0.0",
@@ -32,8 +32,8 @@ Homepage = "https://github.com/SmartWalletFX/sara"
 Documentation = "https://github.com/SmartWalletFX/sara#readme"
 
 [project.scripts]
-sara = "sara.cli.main:main"
+sara = "cli.main:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["sara*"]
+include = ["cli*", "core*", "database*", "infrastructure*", "migrations*"]
