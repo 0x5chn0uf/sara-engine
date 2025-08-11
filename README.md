@@ -1,22 +1,22 @@
-# Serena Memory Bridge
+# Sara Memory Bridge
 
-Serena is a lightweight knowledge base that plugs into any project, providing:
+Sara is a lightweight knowledge base that plugs into any project, providing:
 
-* 💡 **Semantic search** over markdown archives, reflections, and documentation
-* 🔍 **Selective codebase embedding** with smart chunking and incremental updates
-* 📨 **REST API** for runtime content ingestion and retrieval
-* 🏷 **Task-aware schema** with support for archives, reflections, docs, rules, and code
-* 🛠 **Zero-config CLI** (`serena` / `selena`) for indexing, search, and HTTP server
-* ⚡️ **SQLite + vector embeddings** backend – no external services required
-* 🔄 **Content deduplication** and automatic metadata extraction
-* 📊 **Health monitoring** and database diagnostics
+- 💡 **Semantic search** over markdown archives, reflections, and documentation
+- 🔍 **Selective codebase embedding** with smart chunking and incremental updates
+- 📨 **REST API** for runtime content ingestion and retrieval
+- 🏷 **Task-aware schema** with support for archives, reflections, docs, rules, and code
+- 🛠 **Zero-config CLI** (`sara`) for indexing, search, and HTTP server
+- ⚡️ **SQLite + vector embeddings** backend – no external services required
+- 🔄 **Content deduplication** and automatic metadata extraction
+- 📊 **Health monitoring** and database diagnostics
 
 ## Installation
 
 ```bash
 pip install -e .  # from repo root (editable)
 # or once published
-pip install serena
+pip install sara
 ```
 
 ## Quick Start
@@ -52,63 +52,80 @@ selena search "authentication patterns"
 
 ### Two Types of Indexing
 
-Serena provides two distinct indexing commands for different types of content:
+Sara provides two distinct indexing commands for different types of content:
 
-| Command | Purpose | File Types | Use Case |
-|---------|---------|------------|----------|
-| `sara index` | Documentation & content indexing | `*.md`, `*.txt`, `*.json`, `*.yaml`, `*.yml` | TaskMaster archives, documentation, configuration files |
-| `sara embed index` | Code semantic search | `*.py`, `*.ts`, `*.tsx`, `*.js`, `*.jsx` | Semantic code search without exposing full source |
+| Command            | Purpose                          | File Types                                   | Use Case                                                |
+| ------------------ | -------------------------------- | -------------------------------------------- | ------------------------------------------------------- |
+| `sara index`       | Documentation & content indexing | `*.md`, `*.txt`, `*.json`, `*.yaml`, `*.yml` | TaskMaster archives, documentation, configuration files |
+| `sara embed index` | Code semantic search             | `*.py`, `*.ts`, `*.tsx`, `*.js`, `*.jsx`     | Semantic code search without exposing full source       |
 
 **When to use which:**
+
 - Use `sara index` for searching documentation, TaskMaster archives, and content files
 - Use `sara embed index` for semantic code search and finding relevant code patterns
 
 ### Core Commands
 
 #### `sara init`
-Initialize Serena database and configuration.
+
+Initialize Sara database and configuration.
+
 - `-v, --verbose`: Enable verbose logging
 
 #### `sara index [options]`
+
 Scan directories and index memories with semantic embeddings.
+
 - `--directories <paths>`: Comma-separated directories to scan
-- `--force`: Force reindex of existing memories  
+- `--force`: Force reindex of existing memories
 - `--workers <int>`: Number of parallel workers (default: 4)
 - `-v, --verbose`: Enable verbose logging
 
 #### `sara search <query> [options]`
+
 Perform semantic search across indexed memories.
+
 - `--limit <int>`: Maximum number of results (default: 10)
 - `--advanced`: Advanced search mode (planned feature)
 - `-v, --verbose`: Enable verbose logging
 
 #### `sara serve [options]`
+
 Run HTTP API server with automatic documentation.
+
 - `--host <address>`: Server host (default: 127.0.0.1)
-- `--port <int>`: Server port (default: 8765)  
+- `--port <int>`: Server port (default: 8765)
 - `--watch`: Watch for file changes (planned feature)
 - `-v, --verbose`: Enable verbose logging
 
 #### `sara delete <task_id> [options]`
+
 Delete indexed entries manually by task ID.
+
 - `--list`: List available entries with their task IDs
 - `--limit <int>`: Number of entries to show when listing (default: 20)
 - `--show-remaining`: Show remaining entries after deletion
 - `-v, --verbose`: Enable verbose logging
 
 #### `sara get <task_id> [options]`
+
 Get specific archive by task ID.
+
 - `-v, --verbose`: Enable verbose logging
 
 #### `sara latest [options]`
+
 Show latest archived entries.
+
 - `--limit <int>`: Number of entries to show (default: 10)
 - `-v, --verbose`: Enable verbose logging
 
 #### `sara embed <action> [options]`
+
 Selective codebase embedding for semantic code search.
 
 **Actions:**
+
 - `index [options]`: Index codebase or specific files
   - `--force`: Force reindexing (ignore SHA-256 checksums)
   - `--files <files>`: Specific files to index
@@ -118,6 +135,7 @@ Selective codebase embedding for semantic code search.
 - `stats`: Show embedding statistics
 
 **Examples:**
+
 ```bash
 # Index entire codebase
 sara embed index
@@ -134,7 +152,8 @@ sara embed stats
 
 ### Content Types
 
-Serena automatically categorizes content by type:
+Sara automatically categorizes content by type:
+
 - **ARCHIVE**: Completed task archives and historical records
 - **REFLECTION**: Post-completion reflections and lessons learned
 - **DOC**: General documentation and guides
@@ -158,9 +177,11 @@ Serena automatically categorizes content by type:
 ## Configuration
 
 ### Embedding Models
-Sentence-Transformers is pulled in as an optional dependency. The first call will download the default MiniLM-L6 model (~80 MB). Override via `SERENA_MODEL` environment variable if you need a different encoder.
+
+Sentence-Transformers is pulled in as an optional dependency. The first call will download the default MiniLM-L6 model (~80 MB). Override via `SARA_MODEL` environment variable if you need a different encoder.
 
 ### Code Embedding Configuration
+
 Customize code embedding behavior via environment variables:
 
 ```bash
@@ -177,12 +198,14 @@ SARA_EMBEDDING_EXCLUDE_GLOBS="**/test*/**,**/tests/**,**/node_modules/**,**/.git
 ### Default File Patterns
 
 **Included by default:**
+
 - Python files: `*.py`
 - TypeScript/JavaScript: `*.ts`, `*.tsx`, `*.js`, `*.jsx`
 - Backend code: `backend/app/**/*.py`
 - Frontend code: `frontend/src/**/*.ts`, `frontend/src/**/*.tsx`
 
 **Excluded by default:**
+
 - Test files: `**/test*/**`, `**/tests/**`, `**/*test*`
 - Build artifacts: `**/build/**`, `**/dist/**`, `**/*.min.js`, `**/*.map`
 - Dependencies: `**/node_modules/**`, `**/__pycache__/**`, `**/*.pyc`
@@ -191,4 +214,5 @@ SARA_EMBEDDING_EXCLUDE_GLOBS="**/test*/**,**/tests/**,**/node_modules/**,**/.git
 - Coverage reports: `**/coverage/**`, `**/.pytest_cache/**`
 
 ## License
+
 MIT © SmartWalletFX Team
