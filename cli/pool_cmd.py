@@ -2,7 +2,7 @@
 
 from typing import Any
 
-from sara.database.session import get_db_manager, get_pool_metrics
+from database.session import get_db_manager, get_pool_metrics
 
 
 def cmd_pool_status(args) -> None:

@@ -7,7 +7,7 @@ import sys
 import time
 from typing import Any, Dict, List, Optional
 
-from sara.cli.common import RemoteMemory
+from cli.common import RemoteMemory
 
 # All maintenance operations have been moved to server-side only
 # Local database maintenance is no longer supported

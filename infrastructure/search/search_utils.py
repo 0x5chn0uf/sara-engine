@@ -3,9 +3,9 @@
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
-from sara.core.models import SearchResult, TaskKind, TaskStatus
-from sara.database.session import get_db_session as get_session
-from sara.infrastructure.search.search_core import SearchEngine
+from core.models import SearchResult, TaskKind, TaskStatus
+from database.session import get_db_session as get_session
+from infrastructure.search.search_core import SearchEngine
 
 
 def search_memories(
@@ -61,7 +61,7 @@ def get_latest_tasks(
     with get_session(db_path) as session:
         from sqlalchemy import func
 
-        from sara.core.models import Archive
+        from core.models import Archive
 
         query = session.query(Archive)
 

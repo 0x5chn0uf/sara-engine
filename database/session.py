@@ -10,8 +10,8 @@ from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import QueuePool, StaticPool
 
-from sara.core.models import Base
-from sara.settings import database_config, settings
+from core.models import Base
+from settings import database_config, settings
 
 
 class DatabaseManager:

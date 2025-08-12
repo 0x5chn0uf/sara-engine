@@ -14,7 +14,7 @@ from typing import Any, Callable, Dict, List, Optional, Tuple
 
 import numpy as np
 
-from sara.settings import settings
+from settings import settings
 
 
 class EmbeddingGenerator:
@@ -882,8 +882,8 @@ class AsyncEmbeddingQueue:
         embeddings: List[List[float]],
     ) -> None:
         """Store generated embeddings in the database."""
-        from sara.core.models import EmbeddingRecord, Embedding
-        from sara.infrastructure.database import get_session
+        from core.models import EmbeddingRecord, Embedding
+        from infrastructure.database import get_session
 
         try:
             with get_session() as session:

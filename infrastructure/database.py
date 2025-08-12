@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from typing import Optional
 
-from sara.settings import settings
+from settings import settings
 
 
 def get_database_path() -> str:
@@ -24,8 +24,8 @@ def init_database(db_path: Optional[str] = None) -> str:
     Returns:
         str: Path to initialized database
     """
-    from sara.database.migrations import auto_migrate
-    from sara.database.session import get_db_manager
+    from database.migrations import auto_migrate
+    from database.session import get_db_manager
 
     if db_path is None:
         db_path = get_database_path()
@@ -59,14 +59,14 @@ def get_session(db_path: Optional[str] = None):
         with get_session() as session:
             archives = session.query(Archive).all()
     """
-    from sara.database.session import get_db_session
+    from database.session import get_db_session
 
     return get_db_session(db_path)
 
 
 def checkpoint_database(db_path: Optional[str] = None) -> None:
     """Checkpoint the database WAL file."""
-    from sara.database.session import get_db_manager
+    from database.session import get_db_manager
 
     db_manager = get_db_manager(db_path)
     db_manager.checkpoint()
@@ -74,7 +74,7 @@ def checkpoint_database(db_path: Optional[str] = None) -> None:
 
 def vacuum_database(db_path: Optional[str] = None) -> None:
     """Run VACUUM operation to reclaim space."""
-    from sara.database.session import get_db_manager
+    from database.session import get_db_manager
 
     db_manager = get_db_manager(db_path)
     db_manager.vacuum()

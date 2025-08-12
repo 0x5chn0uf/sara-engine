@@ -7,10 +7,10 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from sara.core.errors import ErrorCode, SaraException, ServerUnavailableError
+from core.errors import ErrorCode, SaraException, ServerUnavailableError
 
 # consolidated settings
-from sara.settings import settings
+from settings import settings
 
 
 def setup_logging(verbose: bool = False) -> None:
@@ -31,8 +31,8 @@ def validate_configuration(show_details: bool = False) -> bool:
     Returns:
         bool: True if configuration is valid, False otherwise
     """
-    from sara.core.errors import get_user_friendly_message
-    from sara.settings import database_config, settings
+    from core.errors import get_user_friendly_message
+    from settings import database_config, settings
 
     try:
         # Validate settings
@@ -107,7 +107,7 @@ class RemoteMemory:
 
         # Add db_path property for IndexedFiles table access
         # This allows local tracking even when using remote API
-        from sara.settings import database_config
+        from settings import database_config
 
         self.db_path = database_config.db_path
 

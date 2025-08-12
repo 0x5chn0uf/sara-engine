@@ -9,7 +9,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from typing import List
 
-from sara.infrastructure.write_queue import (EnhancedWriteQueue,
+from infrastructure.write_queue import (EnhancedWriteQueue,
                                                WriteOperationType)
 
 # Configure logging

@@ -6,7 +6,7 @@ import logging
 import sys
 from typing import Any, Optional
 
-from sara.settings import settings
+from settings import settings
 
 
 def _try_server_delete(task_id: str) -> bool:
@@ -29,7 +29,7 @@ def _list_entries_remote(limit: int = 20) -> None:
     """List available entries via server API."""
     remote_memory = None
     try:
-        from sara.cli.common import RemoteMemory
+        from cli.common import RemoteMemory
 
         remote_memory = RemoteMemory()
         if not remote_memory.is_server_available():

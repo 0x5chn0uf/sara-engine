@@ -23,9 +23,9 @@ from typing import Optional
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from sara.database.session import get_db_manager
-from sara.infrastructure.server import create_app
-from sara.settings import (get_development_config, get_production_config,
+from database.session import get_db_manager
+from infrastructure.server import create_app
+from settings import (get_development_config, get_production_config,
                              settings)
 
 

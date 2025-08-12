@@ -14,9 +14,9 @@ from pathlib import Path
 # Add serena to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from sara.infrastructure.watcher import create_memory_watcher
-from sara.cli.common import RemoteMemory
-from sara.core.models import compute_content_hash
+from infrastructure.watcher import create_memory_watcher
+from cli.common import RemoteMemory
+from core.models import compute_content_hash
 
 
 def test_real_time_indexing():

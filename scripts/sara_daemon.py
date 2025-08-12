@@ -293,7 +293,7 @@ class SerenaDaemon:
         """Check server health via HTTP endpoint."""
         import requests
 
-        from sara.settings import settings
+        from settings import settings
 
         url = f"{settings.server_url}/health"
 

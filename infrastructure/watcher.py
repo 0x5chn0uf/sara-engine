@@ -12,7 +12,7 @@ from typing import Callable, Dict, List, Optional, Set
 from watchdog.events import FileSystemEventHandler  # noqa: WPS433
 from watchdog.observers import Observer
 
-from sara.core.models import (
+from core.models import (
     Archive,
     Embedding,
     IndexedFiles,
@@ -20,7 +20,7 @@ from sara.core.models import (
     determine_task_kind,
     extract_task_id_from_path,
 )
-from sara.database.session import get_db_session as get_session
+from database.session import get_db_session as get_session
 
 logger = logging.getLogger(__name__)
 
@@ -209,7 +209,7 @@ class _WatchdogMemoryWatcher:
                 logger.error(f"Failed to load existing files for tracking: {exc}")
 
         if self.auto_add_taskmaster:
-            from sara.cli.common import detect_taskmaster_directories  # lazy import
+            from cli.common import detect_taskmaster_directories  # lazy import
 
             taskmaster_files = 0
             for directory in detect_taskmaster_directories():

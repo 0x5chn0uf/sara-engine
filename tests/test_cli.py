@@ -7,7 +7,7 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from sara.cli import init_cmd, search_cmd
+from cli import init_cmd, search_cmd
 
 
 class TestCLIErrorHandling:

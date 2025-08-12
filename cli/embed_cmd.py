@@ -3,8 +3,8 @@
 import argparse
 from pathlib import Path
 
-from sara.cli.common import setup_logging, validate_configuration, RemoteMemory
-from sara.settings import settings
+from cli.common import setup_logging, validate_configuration, RemoteMemory
+from settings import settings
 
 
 def cmd_embed(args: argparse.Namespace) -> int:

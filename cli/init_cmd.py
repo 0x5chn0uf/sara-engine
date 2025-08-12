@@ -5,7 +5,7 @@ from __future__ import annotations
 import sys
 from typing import Any
 
-from sara.infrastructure.database import init_database
+from infrastructure.database import init_database
 
 
 def cmd_init(args) -> None:

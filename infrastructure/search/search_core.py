@@ -5,9 +5,9 @@ import os
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
-from sara.core.models import SearchResult, TaskKind, TaskStatus
-from sara.database.session import get_db_session as get_session
-from sara.infrastructure.embeddings import (
+from core.models import SearchResult, TaskKind, TaskStatus
+from database.session import get_db_session as get_session
+from infrastructure.embeddings import (
     batch_cosine_similarity, generate_embedding,
     optimized_batch_cosine_similarity)
 

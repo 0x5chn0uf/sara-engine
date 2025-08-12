@@ -28,13 +28,13 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from sqlalchemy import text
 
-from sara.cli.common import RemoteMemory
-from sara.infrastructure.database import (
+from cli.common import RemoteMemory
+from infrastructure.database import (
     checkpoint_database,
     get_database_path,
     vacuum_database,
 )
-from sara.settings import settings
+from settings import settings
 
 
 def setup_logging(verbose: bool = False) -> None:
@@ -127,10 +127,10 @@ def cmd_reembed(args) -> None:
         memory = RemoteMemory()
 
         # Find stale embeddings using session
-        from sara.database.session import get_db_session
+        from database.session import get_db_session
 
         with get_db_session() as session:
-            from sara.core.models import Archive
+            from core.models import Archive
 
             # Find archives with stale embeddings
             stale_archives = (
@@ -227,12 +227,12 @@ def cmd_health(args) -> None:
 
     if args.detailed:
         try:
-            from sara.database.session import get_db_session
+            from database.session import get_db_session
 
             with get_db_session() as session:
                 from sqlalchemy import func
 
-                from sara.core.models import Archive
+                from core.models import Archive
 
                 # Task kind distribution
                 kind_stats = (
@@ -519,7 +519,7 @@ class MaintenanceService:  # noqa: D101 – simple wrapper
     @staticmethod
     def _load_meta_timestamp(key: str) -> float:
         """Return stored UNIX timestamp for *key* or 0 if none."""
-        from sara.database.session import get_db_session
+        from database.session import get_db_session
 
         try:
             with get_db_session() as session:
@@ -538,7 +538,7 @@ class MaintenanceService:  # noqa: D101 – simple wrapper
 
     @staticmethod
     def _store_meta_timestamp(key: str, ts: float) -> None:
-        from sara.database.session import get_db_session
+        from database.session import get_db_session
 
         with get_db_session() as session:
             session.execute(
@@ -572,7 +572,7 @@ class MaintenanceService:  # noqa: D101 – simple wrapper
 
                 # Raw SQLite approach to bypass SQLAlchemy issues
                 import sqlite3
-                from sara.infrastructure.database import get_database_path
+                from infrastructure.database import get_database_path
 
                 db_path = get_database_path()
                 print(f"   - DEBUG: Database path: {db_path}")
@@ -592,7 +592,7 @@ class MaintenanceService:  # noqa: D101 – simple wrapper
 
                 # Raw SQLite approach to bypass SQLAlchemy issues
                 import sqlite3
-                from sara.infrastructure.database import get_database_path
+                from infrastructure.database import get_database_path
 
                 db_path = get_database_path()
                 with sqlite3.connect(db_path) as conn:
@@ -609,8 +609,8 @@ class MaintenanceService:  # noqa: D101 – simple wrapper
                 # Server-side health check should use local database access
                 from sqlalchemy import func
 
-                from sara.core.models import Archive, Embedding
-                from sara.infrastructure.database import get_session
+                from core.models import Archive, Embedding
+                from infrastructure.database import get_session
 
                 with get_session() as session:
                     archive_count = (

@@ -15,7 +15,7 @@ This replaces the previous bespoke ``serena.config`` layering with a single
 An already-instantiated ``settings`` singleton is exposed for application-wide
 use so existing code can simply do::
 
-    from sara.settings import settings
+    from settings import settings
     db_path = settings.memory_db
 
 The legacy helper functions in ``serena.config`` have been re-implemented to
@@ -108,7 +108,7 @@ class DatabaseConfig(BaseModel):
             return self._db_path
 
         # Import settings here to avoid circular import
-        from sara.settings import settings
+        from settings import settings
 
         return settings.memory_db
 
@@ -174,7 +174,7 @@ class DatabaseConfig(BaseModel):
             errors.append(f"Migrations directory not found: {self.migrations_path}")
 
         if errors:
-            from sara.core.errors import ValidationError
+            from core.errors import ValidationError
 
             raise ValidationError(
                 message="Database configuration validation failed",
@@ -488,7 +488,7 @@ class SerenaSettings(BaseSettings):
             errors.append(f"Invalid server URL format: {self.server_url}")
 
         if errors:
-            from sara.core.errors import ValidationError
+            from core.errors import ValidationError
 
             raise ValidationError(
                 message="Settings validation failed during startup",

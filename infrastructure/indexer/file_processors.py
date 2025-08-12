@@ -4,7 +4,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional, Set
 
-from sara.core.models import TaskKind, TaskStatus, determine_task_kind
+from core.models import TaskKind, TaskStatus, determine_task_kind
 
 
 def should_process_file(file_path: str, strategic_code_paths: Set[str]) -> bool:

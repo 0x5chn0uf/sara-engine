@@ -11,27 +11,27 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
-from sara.core.errors import (
+from core.errors import (
     ErrorCode,
     SaraException,
     create_error_response,
     create_success_response,
 )
-from sara.core.models import (
+from core.models import (
     Archive,
     Embedding,
     IndexedFiles,
     compute_content_hash,
     generate_summary,
 )
-from sara.database.session import get_db_session
-from sara.infrastructure.embeddings import (
+from database.session import get_db_session
+from infrastructure.embeddings import (
     chunk_content,
     get_default_generator,
     preprocess_content,
 )
-from sara.infrastructure.write_queue import WriteOperationType, write_queue
-from sara.settings import settings
+from infrastructure.write_queue import WriteOperationType, write_queue
+from settings import settings
 
 
 @asynccontextmanager
@@ -41,8 +41,8 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     import threading
     import signal
 
-    from sara.infrastructure.embeddings import get_default_generator
-    from sara.scripts.maintenance import MaintenanceService
+    from infrastructure.embeddings import get_default_generator
+    from scripts.maintenance import MaintenanceService
 
     # Disable multiprocessing start method issues on macOS
     if hasattr(os, "fork"):
@@ -72,8 +72,8 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     print("🔄 Initializing write queue...")
     queue_start = time.time()
     try:
-        from sara.infrastructure.write_queue import write_queue, _create_write_queue
-        import sara.infrastructure.write_queue as wq_module
+        from infrastructure.write_queue import write_queue, _create_write_queue
+        import infrastructure.write_queue as wq_module
 
         # Initialize global write queue if not already done
         if wq_module.write_queue is None:
@@ -152,7 +152,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     if watch_mode:
         print("👀 Starting file watcher for automatic re-indexing...")
         try:
-            from sara.infrastructure.watcher import create_memory_watcher
+            from infrastructure.watcher import create_memory_watcher
 
             # Create a simple memory adapter that works directly with the server's database
             class ServerMemoryAdapter:
@@ -171,7 +171,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
                     """Upsert content using the server's direct database access."""
                     # Use the server's own upsert function
                     import asyncio
-                    from sara.core.models import TaskKind, TaskStatus
+                    from core.models import TaskKind, TaskStatus
                     from datetime import datetime
 
                     try:
@@ -198,7 +198,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
                             )
                         else:
                             # We're in a sync context, can run the async upsert
-                            from sara.database.session import get_db_session
+                            from database.session import get_db_session
 
                             with get_db_session() as session:
                                 result = asyncio.run(
@@ -219,8 +219,8 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
                 def delete(self, task_id: str):
                     """Delete task from database."""
                     try:
-                        from sara.database.session import get_db_session
-                        from sara.core.models import Archive
+                        from database.session import get_db_session
+                        from core.models import Archive
 
                         with get_db_session() as session:
                             archive = (
@@ -314,7 +314,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     # Shutdown write queue gracefully with better error handling
     print("   - Shutting down write queue...")
     try:
-        from sara.infrastructure.write_queue import write_queue
+        from infrastructure.write_queue import write_queue
 
         if write_queue is not None:
             # Get current queue status before shutdown
@@ -371,7 +371,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     # Close database connections with timeout
     print("   - Closing database connections...")
     try:
-        from sara.database.session import get_db_manager
+        from database.session import get_db_manager
 
         db_manager = get_db_manager()
 
@@ -430,7 +430,7 @@ async def _upsert_archive_direct(
 
     def _upsert_internal():
         # Create a new database session for thread safety
-        from sara.infrastructure.database import get_session
+        from infrastructure.database import get_session
 
         # Pre-process & chunk content for embeddings
         clean_content = preprocess_content(markdown_text)
@@ -517,7 +517,7 @@ async def _upsert_archive_direct(
                 session.commit()
 
             # Queue embeddings for async generation (non-blocking) - moved after session commit
-            from sara.infrastructure.embeddings import get_embedding_queue
+            from infrastructure.embeddings import get_embedding_queue
 
             if chunks:
                 embedding_queue = get_embedding_queue()
@@ -542,7 +542,7 @@ async def _upsert_archive_direct(
 
     if async_write:
         try:
-            from sara.infrastructure.write_queue import write_queue as wq
+            from infrastructure.write_queue import write_queue as wq
 
             if wq is None:
                 print(
@@ -715,7 +715,7 @@ def create_app() -> FastAPI:
     @app.get("/health")
     async def health_check():
         """Enhanced health check endpoint with comprehensive system monitoring."""
-        from sara.infrastructure.health import get_health_manager
+        from infrastructure.health import get_health_manager
 
         health_manager = get_health_manager()
         health_data = health_manager.get_comprehensive_health()
@@ -748,7 +748,7 @@ def create_app() -> FastAPI:
     @app.get("/ready")
     async def readiness_check():
         """Kubernetes-style readiness probe - is the service ready to serve traffic?"""
-        from sara.infrastructure.health import get_health_manager
+        from infrastructure.health import get_health_manager
 
         health_manager = get_health_manager()
         readiness_data = health_manager.get_readiness_check()
@@ -776,7 +776,7 @@ def create_app() -> FastAPI:
     @app.get("/live")
     async def liveness_check():
         """Kubernetes-style liveness probe - is the service alive?"""
-        from sara.infrastructure.health import get_health_manager
+        from infrastructure.health import get_health_manager
 
         health_manager = get_health_manager()
         liveness_data = health_manager.get_liveness_check()
@@ -1027,7 +1027,7 @@ def create_app() -> FastAPI:
                     details={"threshold": threshold},
                 )
 
-            from sara.infrastructure.search import SearchEngine
+            from infrastructure.search import SearchEngine
 
             search_engine = SearchEngine()
             search_results = search_engine.search(query=q, k=limit)
@@ -1127,7 +1127,7 @@ def create_app() -> FastAPI:
     async def get_queue_status():
         """Get write queue status and metrics."""
         try:
-            from sara.infrastructure.write_queue import write_queue
+            from infrastructure.write_queue import write_queue
 
             if write_queue is None:
                 return create_error_response(
@@ -1172,8 +1172,8 @@ def create_app() -> FastAPI:
         try:
             from datetime import datetime
 
-            from sara.cli.common import RemoteMemory
-            from sara.core.models import TaskKind, TaskStatus
+            from cli.common import RemoteMemory
+            from core.models import TaskKind, TaskStatus
 
             # Extract data from request
             task_id = request.get("task_id")
@@ -1316,7 +1316,7 @@ def create_app() -> FastAPI:
     async def generate_embeddings(texts: list[str], db: Session = Depends(get_db)):
         """Generate embeddings using the server's pre-loaded model."""
         try:
-            from sara.infrastructure.embeddings import get_default_generator
+            from infrastructure.embeddings import get_default_generator
 
             # Validate input
             if not texts:
@@ -1380,7 +1380,7 @@ def create_app() -> FastAPI:
     async def embed_index(request: dict):
         """Index codebase or specific files for embedding."""
         try:
-            from sara.infrastructure.code_embedding import CodeEmbeddingSystem
+            from infrastructure.code_embedding import CodeEmbeddingSystem
             from pathlib import Path
 
             # Initialize code embedding system
@@ -1439,7 +1439,7 @@ def create_app() -> FastAPI:
     async def embed_search(request: dict):
         """Search embedded code using semantic similarity."""
         try:
-            from sara.infrastructure.code_embedding import CodeEmbeddingSystem
+            from infrastructure.code_embedding import CodeEmbeddingSystem
             from pathlib import Path
 
             # Initialize code embedding system
@@ -1478,7 +1478,7 @@ def create_app() -> FastAPI:
     async def embed_stats():
         """Get code embedding statistics."""
         try:
-            from sara.infrastructure.code_embedding import CodeEmbeddingSystem
+            from infrastructure.code_embedding import CodeEmbeddingSystem
             from pathlib import Path
 
             # Initialize code embedding system

@@ -7,8 +7,8 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass
 
-from sara.cli.common import RemoteMemory, setup_logging
-from sara.core.errors import ErrorCode, get_user_friendly_message
+from cli.common import RemoteMemory, setup_logging
+from core.errors import ErrorCode, get_user_friendly_message
 
 
 @dataclass

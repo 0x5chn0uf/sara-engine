@@ -3,7 +3,7 @@
 import logging
 from typing import Any
 
-from sara.cli.common import RemoteMemory
+from cli.common import RemoteMemory
 
 
 def cmd_latest(args) -> None:

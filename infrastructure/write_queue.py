@@ -550,7 +550,7 @@ class EnhancedWriteQueue:
 
         # Shutdown embedding queue as well with timeout protection
         try:
-            from sara.infrastructure.embeddings import shutdown_embedding_queue
+            from infrastructure.embeddings import shutdown_embedding_queue
 
             embedding_timeout = max(2.0, remaining_timeout * 0.3)
             print(f"Shutting down embedding queue (timeout: {embedding_timeout:.1f}s)...")
@@ -694,7 +694,7 @@ class EnhancedWriteQueue:
 # Global singleton instance with settings-based configuration
 def _create_write_queue() -> EnhancedWriteQueue:
     """Create write queue with configuration from settings."""
-    from sara.settings import settings
+    from settings import settings
 
     return EnhancedWriteQueue(
         batch_size=settings.write_batch_size,

@@ -8,7 +8,7 @@ from alembic.runtime.migration import MigrationContext
 from alembic.script import ScriptDirectory
 from sqlalchemy import create_engine
 
-from sara.settings import database_config, settings
+from settings import database_config, settings
 
 
 class MigrationManager:
@@ -185,7 +185,7 @@ class MigrationManager:
         """Initialize database with current schema and stamp with head revision."""
         try:
             # Create tables using SQLAlchemy
-            from sara.core.models import Base
+            from core.models import Base
 
             engine = create_engine(self.db_url)
             Base.metadata.create_all(engine)

@@ -5,7 +5,7 @@ from __future__ import annotations
 This lightweight wrapper re-exports the ``main`` function from
 :pyfile:`serena.cli.main` so external callers can simply do::
 
-    from sara.cli import main
+    from cli import main
     main()
 
 The heavy logic will be progressively split into specialised modules

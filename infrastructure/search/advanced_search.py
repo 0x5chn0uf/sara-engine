@@ -3,8 +3,8 @@
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
-from sara.core.models import SearchResult, TaskKind, TaskStatus
-from sara.infrastructure.search.search_core import SearchEngine
+from core.models import SearchResult, TaskKind, TaskStatus
+from infrastructure.search.search_core import SearchEngine
 
 
 class AdvancedSearchEngine(SearchEngine):
@@ -120,10 +120,10 @@ def search_memories_advanced(
     db_path: Optional[str] = None,
 ) -> List[SearchResult]:
     """Advanced search with context awareness."""
-    from sara.database.session import get_session
+    from database.session import get_session
 
     if db_path is None:
-        from sara.settings import settings
+        from settings import settings
 
         db_path = settings.memory_db
 
@@ -135,10 +135,10 @@ def get_context_suggestions(
     context: Dict[str, Any], limit: int = 5, db_path: Optional[str] = None
 ) -> List[str]:
     """Get context-aware search suggestions."""
-    from sara.database.session import get_session
+    from database.session import get_session
 
     if db_path is None:
-        from sara.settings import settings
+        from settings import settings
 
         db_path = settings.memory_db
 

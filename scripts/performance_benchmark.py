@@ -21,7 +21,7 @@ from typing import List
 # Add serena to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from sara.infrastructure.embeddings import (
+from infrastructure.embeddings import (
     AsyncEmbeddingQueue, EmbeddingGenerator, batch_cosine_similarity,
     fast_similarity_with_precomputed, get_embedding_queue,
     optimized_batch_cosine_similarity, precompute_vector_norms,

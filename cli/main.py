@@ -18,7 +18,7 @@ if __package__ is None or __package__ == "":  # pragma: no cover – direct scri
         spec.loader.exec_module(module)  # type: ignore[arg-type]
         sys.modules["sara"] = module
 
-from sara.cli import common  # noqa: E402  import after path fix
+from cli import common  # noqa: E402  import after path fix
 
 # ---------------------------------------------------------------------------
 # Utility for dynamic command registrations
@@ -42,7 +42,7 @@ _COMMAND_MODULES = [
 
 def _register_commands(subparsers: argparse._SubParsersAction) -> None:  # type: ignore[name-defined]
     for mod_name in _COMMAND_MODULES:
-        mod = importlib.import_module(f"sara.cli.{mod_name}")
+        mod = importlib.import_module(f"cli.{mod_name}")
         register: Callable[[Any], None] = getattr(mod, "register")
         register(subparsers)
 

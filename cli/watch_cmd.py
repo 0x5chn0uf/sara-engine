@@ -19,8 +19,8 @@ def cmd_watch(args) -> None:
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     )
     
-    from sara.cli.common import RemoteMemory
-    from sara.infrastructure.indexer.indexer_core import MemoryIndexer
+    from cli.common import RemoteMemory
+    from infrastructure.indexer.indexer_core import MemoryIndexer
     
     try:
         # Initialize remote memory connection

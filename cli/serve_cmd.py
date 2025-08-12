@@ -14,7 +14,7 @@ def cmd_serve(args) -> None:
         import os
         import uvicorn
 
-        from sara.infrastructure.server import create_app
+        from infrastructure.server import create_app
 
         # Set environment variable to enable file watching if requested
         if args.watch:

@@ -5,8 +5,8 @@ from __future__ import annotations
 import time
 from typing import Any
 
-from sara.cli.common import detect_taskmaster_directories
-from sara.infrastructure.indexer import MemoryIndexer
+from cli.common import detect_taskmaster_directories
+from infrastructure.indexer import MemoryIndexer
 
 
 def cmd_index(args) -> None:

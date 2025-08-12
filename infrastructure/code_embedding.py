@@ -12,10 +12,10 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional
 
-from sara.core.models import CodeEmbedding, Files
-from sara.settings import settings
-from sara.database.session import get_db_session
-from sara.infrastructure.embeddings import get_default_generator
+from core.models import CodeEmbedding, Files
+from settings import settings
+from database.session import get_db_session
+from infrastructure.embeddings import get_default_generator
 
 
 class CodeChunker:
@@ -293,13 +293,13 @@ class RepositoryCrawler:
         if include_globs is not None:
             self.include_globs = include_globs
         else:
-            from sara.settings import settings
+            from settings import settings
             self.include_globs = settings.embedding_include_globs_list
 
         if exclude_globs is not None:
             self.exclude_globs = exclude_globs
         else:
-            from sara.settings import settings
+            from settings import settings
             self.exclude_globs = settings.embedding_exclude_globs_list
 
     def find_code_files(self) -> List[str]:
@@ -452,7 +452,7 @@ class CodeEmbeddingSystem:
             file_info = self.crawler.get_file_info(filepath)
 
             # Check if file already exists and is up to date
-            from sara.core.models import IndexedFiles
+            from core.models import IndexedFiles
             
             existing_file = session.query(Files).filter_by(filepath=filepath).first()
             existing_indexed = session.query(IndexedFiles).filter_by(filepath=filepath).first()
@@ -496,7 +496,7 @@ class CodeEmbeddingSystem:
                 session.flush()  # Get the ID
 
             # Create or update indexed_files tracking record
-            from sara.core.models import IndexedFiles
+            from core.models import IndexedFiles
             
             existing_indexed = session.query(IndexedFiles).filter_by(filepath=filepath).first()
             if existing_indexed:
@@ -621,7 +621,7 @@ class CodeEmbeddingSystem:
     def get_stats(self) -> Dict:
         """Get embedding statistics."""
         with get_db_session(self.db_path) as session:
-            from sara.core.models import IndexedFiles
+            from core.models import IndexedFiles
             
             file_count = session.query(Files).count()
             embedding_count = session.query(CodeEmbedding).count()

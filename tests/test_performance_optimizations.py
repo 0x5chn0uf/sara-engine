@@ -17,12 +17,12 @@ from unittest.mock import Mock, patch
 import numpy as np
 import pytest
 
-from sara.infrastructure.embeddings import (
+from infrastructure.embeddings import (
     AsyncEmbeddingQueue, EmbeddingGenerator, batch_cosine_similarity,
     fast_similarity_with_precomputed, get_embedding_queue,
     optimized_batch_cosine_similarity, precompute_vector_norms,
     shutdown_embedding_queue)
-from sara.infrastructure.search.search_core import SearchEngine
+from infrastructure.search.search_core import SearchEngine
 
 
 class TestAsyncEmbeddingQueue:

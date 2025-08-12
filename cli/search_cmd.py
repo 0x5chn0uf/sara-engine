@@ -6,9 +6,9 @@ import logging
 import sys
 from typing import Any
 
-from sara.core.errors import (ErrorCode, SaraException,
+from core.errors import (ErrorCode, SaraException,
                                 get_user_friendly_message)
-from sara.settings import settings
+from settings import settings
 import json
 
 
@@ -16,7 +16,7 @@ def _try_server_search(query: str, limit: int):
     """Try to use server API for search with structured error handling."""
     remote_memory = None
     try:
-        from sara.cli.common import RemoteMemory
+        from cli.common import RemoteMemory
 
         remote_memory = RemoteMemory()
         if not remote_memory.is_server_available():
@@ -37,7 +37,7 @@ def _try_server_search(query: str, limit: int):
         # Convert API response to SearchResult objects
         from datetime import datetime
 
-        from sara.core.models import SearchResult, TaskKind, TaskStatus
+        from core.models import SearchResult, TaskKind, TaskStatus
 
         results = []
         for item in results_data:

@@ -38,7 +38,7 @@ class HealthCheckManager:
 
         # Database connectivity check
         try:
-            from sara.database.session import get_db_session
+            from database.session import get_db_session
 
             with get_db_session() as session:
                 session.execute(text("SELECT 1")).fetchone()
@@ -49,7 +49,7 @@ class HealthCheckManager:
 
         # Write queue health check
         try:
-            from sara.infrastructure.write_queue import write_queue
+            from infrastructure.write_queue import write_queue
 
             if write_queue is None:
                 checks["ready"] = False
@@ -114,7 +114,7 @@ class HealthCheckManager:
             return self.cached_db_health
 
         try:
-            from sara.database.session import get_db_session
+            from database.session import get_db_session
 
             db_start = time.time()
             with get_db_session() as session:
@@ -165,7 +165,7 @@ class HealthCheckManager:
             return self.cached_embedding_health
 
         try:
-            from sara.infrastructure.embeddings import get_default_generator
+            from infrastructure.embeddings import get_default_generator
 
             embedding_start = time.time()
             generator = get_default_generator()
@@ -207,7 +207,7 @@ class HealthCheckManager:
     def _check_write_queue_health(self) -> Dict[str, Any]:
         """Check write queue health."""
         try:
-            from sara.infrastructure.write_queue import write_queue
+            from infrastructure.write_queue import write_queue
 
             if write_queue is None:
                 return {"status": "unhealthy", "error": "Write queue not initialized"}
@@ -221,7 +221,7 @@ class HealthCheckManager:
         try:
             memory_info = psutil.virtual_memory()
 
-            from sara.settings import settings
+            from settings import settings
 
             db_path = Path(settings.memory_db)
             disk_info = psutil.disk_usage(str(db_path.parent))
@@ -259,7 +259,7 @@ class HealthCheckManager:
     def _get_database_metrics(self) -> Dict[str, Any]:
         """Get database file metrics."""
         try:
-            from sara.settings import settings
+            from settings import settings
 
             db_path = Path(settings.memory_db)
 
@@ -323,7 +323,7 @@ class HealthCheckManager:
         import platform
         import sys
 
-        from sara.settings import settings
+        from settings import settings
 
         return {
             "environment": settings.environment,

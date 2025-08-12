@@ -6,7 +6,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Dict, List, Optional, Set
 
-from sara.core.models import IndexedFiles, extract_task_id_from_path
+from core.models import IndexedFiles, extract_task_id_from_path
 
 from .content_extractors import extract_code_content, extract_title_from_content
 from .file_processors import (
@@ -37,7 +37,7 @@ class MemoryIndexer:
             self.memory = memory
         else:
             # Only remote memory is supported - no fallbacks
-            from sara.cli.common import RemoteMemory
+            from cli.common import RemoteMemory
 
             remote_memory = RemoteMemory()
             if not remote_memory.is_server_available():
@@ -48,7 +48,7 @@ class MemoryIndexer:
             print("✅ Using server-based memory for indexing (async writes enabled)")
 
         # Use centralized directory and file patterns from settings
-        from sara.settings import settings
+        from settings import settings
 
         # Default scan directories from settings
         self.scan_dirs = settings.index_directories_list + [
@@ -97,7 +97,7 @@ class MemoryIndexer:
             db_path = self.memory.db_path
             if db_path and Path(db_path).exists():
                 try:
-                    from sara.database.session import get_db_session as get_session
+                    from database.session import get_db_session as get_session
 
                     with get_session(db_path) as session:
                         indexed_files = session.query(IndexedFiles).all()
@@ -115,7 +115,7 @@ class MemoryIndexer:
             db_path = self.memory.db_path
             if db_path and Path(db_path).exists():
                 try:
-                    from sara.database.session import get_db_session as get_session
+                    from database.session import get_db_session as get_session
 
                     with get_session(db_path) as session:
                         indexed_file = (
@@ -390,7 +390,7 @@ class MemoryIndexer:
                 content = raw_content
 
             # Compute content hash for duplicate detection
-            from sara.core.models import compute_content_hash
+            from core.models import compute_content_hash
 
             content_hash = compute_content_hash(content)
 
@@ -458,7 +458,7 @@ class MemoryIndexer:
             db_path = self.memory.db_path
             if db_path and Path(db_path).exists():
                 try:
-                    from sara.database.session import get_db_session as get_session
+                    from database.session import get_db_session as get_session
                     from datetime import datetime
 
                     file_stat = Path(file_path).stat()
@@ -551,7 +551,7 @@ class MemoryIndexer:
 
         if not self.watcher:
             print("Creating new file watcher for continuous monitoring")
-            from sara.infrastructure.watcher import create_memory_watcher
+            from infrastructure.watcher import create_memory_watcher
 
             def indexer_callback(action: str, task_id: str, path: str) -> None:
                 """Callback for watcher events."""
